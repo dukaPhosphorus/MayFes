@@ -1,0 +1,853 @@
+backend: tensorflow
+class_name: Model
+config:
+  input_layers:
+  - - left_features
+    - 0
+    - 0
+  - - central_features
+    - 0
+    - 0
+  - - right_features
+    - 0
+    - 0
+  - - left_metas
+    - 0
+    - 0
+  - - central_metas
+    - 0
+    - 0
+  - - right_metas
+    - 0
+    - 0
+  - - left_local_seqs
+    - 0
+    - 0
+  - - right_local_seqs
+    - 0
+    - 0
+  layers:
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 32
+      - 161
+      dtype: float32
+      name: left_features
+      sparse: false
+    inbound_nodes: []
+    name: left_features
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 32
+      - 4
+      dtype: float32
+      name: left_metas
+      sparse: false
+    inbound_nodes: []
+    name: left_metas
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 32
+      - 161
+      dtype: float32
+      name: right_features
+      sparse: false
+    inbound_nodes: []
+    name: right_features
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 32
+      - 4
+      dtype: float32
+      name: right_metas
+      sparse: false
+    inbound_nodes: []
+    name: right_metas
+  - class_name: Concatenate
+    config:
+      axis: -1
+      name: concatenate_1
+      trainable: true
+    inbound_nodes:
+    - - - left_features
+        - 0
+        - 0
+        - &id001 {}
+      - - left_metas
+        - 0
+        - 0
+        - *id001
+    name: concatenate_1
+  - class_name: Concatenate
+    config:
+      axis: -1
+      name: concatenate_2
+      trainable: true
+    inbound_nodes:
+    - - - right_features
+        - 0
+        - 0
+        - &id002 {}
+      - - right_metas
+        - 0
+        - 0
+        - *id002
+    name: concatenate_2
+  - class_name: TimeDistributed
+    config:
+      layer:
+        class_name: Dense
+        config:
+          activation: linear
+          activity_regularizer: null
+          batch_input_shape: !!python/tuple
+          - null
+          - 165
+          bias_constraint: null
+          bias_initializer:
+            class_name: Zeros
+            config: {}
+          bias_regularizer: null
+          dtype: float32
+          kernel_constraint: null
+          kernel_initializer:
+            class_name: VarianceScaling
+            config:
+              distribution: uniform
+              mode: fan_avg
+              scale: 1.0
+              seed: null
+          kernel_regularizer: null
+          name: embedding_left
+          trainable: true
+          units: 100
+          use_bias: true
+      name: time_distributed_1
+      trainable: true
+    inbound_nodes:
+    - - - concatenate_1
+        - 0
+        - 0
+        - {}
+    name: time_distributed_1
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 100
+      dtype: float32
+      name: central_features
+      sparse: false
+    inbound_nodes: []
+    name: central_features
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 4
+      dtype: float32
+      name: central_metas
+      sparse: false
+    inbound_nodes: []
+    name: central_metas
+  - class_name: TimeDistributed
+    config:
+      layer:
+        class_name: Dense
+        config:
+          activation: linear
+          activity_regularizer: null
+          batch_input_shape: !!python/tuple
+          - null
+          - 165
+          bias_constraint: null
+          bias_initializer:
+            class_name: Zeros
+            config: {}
+          bias_regularizer: null
+          dtype: float32
+          kernel_constraint: null
+          kernel_initializer:
+            class_name: VarianceScaling
+            config:
+              distribution: uniform
+              mode: fan_avg
+              scale: 1.0
+              seed: null
+          kernel_regularizer: null
+          name: embedding_right
+          trainable: true
+          units: 100
+          use_bias: true
+      name: time_distributed_2
+      trainable: true
+    inbound_nodes:
+    - - - concatenate_2
+        - 0
+        - 0
+        - {}
+    name: time_distributed_2
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 4
+      - 61
+      dtype: float32
+      name: left_local_seqs
+      sparse: false
+    inbound_nodes: []
+    name: left_local_seqs
+  - class_name: InputLayer
+    config:
+      batch_input_shape: !!python/tuple
+      - null
+      - 4
+      - 61
+      dtype: float32
+      name: right_local_seqs
+      sparse: false
+    inbound_nodes: []
+    name: right_local_seqs
+  - class_name: LSTM
+    config:
+      activation: tanh
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      dropout: 0.0
+      go_backwards: false
+      implementation: 1
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: lstm_left_0
+      recurrent_activation: hard_sigmoid
+      recurrent_constraint: null
+      recurrent_dropout: 0.0
+      recurrent_initializer:
+        class_name: Orthogonal
+        config:
+          gain: 1.0
+          seed: null
+      recurrent_regularizer: null
+      return_sequences: true
+      return_state: false
+      stateful: false
+      trainable: true
+      unit_forget_bias: true
+      units: 100
+      unroll: false
+      use_bias: true
+    inbound_nodes:
+    - - - time_distributed_1
+        - 0
+        - 0
+        - {}
+    name: lstm_left_0
+  - class_name: Concatenate
+    config:
+      axis: -1
+      name: concatenate_3
+      trainable: true
+    inbound_nodes:
+    - - - central_features
+        - 0
+        - 0
+        - &id003 {}
+      - - central_metas
+        - 0
+        - 0
+        - *id003
+    name: concatenate_3
+  - class_name: LSTM
+    config:
+      activation: tanh
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      dropout: 0.0
+      go_backwards: false
+      implementation: 1
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: lstm_right_0
+      recurrent_activation: hard_sigmoid
+      recurrent_constraint: null
+      recurrent_dropout: 0.0
+      recurrent_initializer:
+        class_name: Orthogonal
+        config:
+          gain: 1.0
+          seed: null
+      recurrent_regularizer: null
+      return_sequences: true
+      return_state: false
+      stateful: false
+      trainable: true
+      unit_forget_bias: true
+      units: 100
+      unroll: false
+      use_bias: true
+    inbound_nodes:
+    - - - time_distributed_2
+        - 0
+        - 0
+        - {}
+    name: lstm_right_0
+  - class_name: TimeDistributed
+    config:
+      layer:
+        class_name: Dense
+        config:
+          activation: linear
+          activity_regularizer: null
+          batch_input_shape: !!python/tuple
+          - null
+          - 61
+          bias_constraint: null
+          bias_initializer:
+            class_name: Zeros
+            config: {}
+          bias_regularizer: null
+          dtype: float32
+          kernel_constraint: null
+          kernel_initializer:
+            class_name: VarianceScaling
+            config:
+              distribution: uniform
+              mode: fan_avg
+              scale: 1.0
+              seed: null
+          kernel_regularizer: null
+          name: embedding_local_left
+          trainable: true
+          units: 100
+          use_bias: true
+      name: time_distributed_3
+      trainable: true
+    inbound_nodes:
+    - - - left_local_seqs
+        - 0
+        - 0
+        - {}
+    name: time_distributed_3
+  - class_name: TimeDistributed
+    config:
+      layer:
+        class_name: Dense
+        config:
+          activation: linear
+          activity_regularizer: null
+          batch_input_shape: !!python/tuple
+          - null
+          - 61
+          bias_constraint: null
+          bias_initializer:
+            class_name: Zeros
+            config: {}
+          bias_regularizer: null
+          dtype: float32
+          kernel_constraint: null
+          kernel_initializer:
+            class_name: VarianceScaling
+            config:
+              distribution: uniform
+              mode: fan_avg
+              scale: 1.0
+              seed: null
+          kernel_regularizer: null
+          name: embedding_local_right
+          trainable: true
+          units: 100
+          use_bias: true
+      name: time_distributed_4
+      trainable: true
+    inbound_nodes:
+    - - - right_local_seqs
+        - 0
+        - 0
+        - {}
+    name: time_distributed_4
+  - class_name: LSTM
+    config:
+      activation: tanh
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      dropout: 0.0
+      go_backwards: false
+      implementation: 1
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: lstm_left_1
+      recurrent_activation: hard_sigmoid
+      recurrent_constraint: null
+      recurrent_dropout: 0.0
+      recurrent_initializer:
+        class_name: Orthogonal
+        config:
+          gain: 1.0
+          seed: null
+      recurrent_regularizer: null
+      return_sequences: false
+      return_state: false
+      stateful: false
+      trainable: true
+      unit_forget_bias: true
+      units: 100
+      unroll: false
+      use_bias: true
+    inbound_nodes:
+    - - - lstm_left_0
+        - 0
+        - 0
+        - {}
+    name: lstm_left_1
+  - class_name: Dense
+    config:
+      activation: relu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: dense_1
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - concatenate_3
+        - 0
+        - 0
+        - {}
+    name: dense_1
+  - class_name: LSTM
+    config:
+      activation: tanh
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      dropout: 0.0
+      go_backwards: false
+      implementation: 1
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: lstm_right_1
+      recurrent_activation: hard_sigmoid
+      recurrent_constraint: null
+      recurrent_dropout: 0.0
+      recurrent_initializer:
+        class_name: Orthogonal
+        config:
+          gain: 1.0
+          seed: null
+      recurrent_regularizer: null
+      return_sequences: false
+      return_state: false
+      stateful: false
+      trainable: true
+      unit_forget_bias: true
+      units: 100
+      unroll: false
+      use_bias: true
+    inbound_nodes:
+    - - - lstm_right_0
+        - 0
+        - 0
+        - {}
+    name: lstm_right_1
+  - class_name: LSTM
+    config:
+      activation: tanh
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      dropout: 0.0
+      go_backwards: false
+      implementation: 1
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: lstm_local_left_1
+      recurrent_activation: hard_sigmoid
+      recurrent_constraint: null
+      recurrent_dropout: 0.0
+      recurrent_initializer:
+        class_name: Orthogonal
+        config:
+          gain: 1.0
+          seed: null
+      recurrent_regularizer: null
+      return_sequences: false
+      return_state: false
+      stateful: false
+      trainable: true
+      unit_forget_bias: true
+      units: 80
+      unroll: false
+      use_bias: true
+    inbound_nodes:
+    - - - time_distributed_3
+        - 0
+        - 0
+        - {}
+    name: lstm_local_left_1
+  - class_name: LSTM
+    config:
+      activation: tanh
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      dropout: 0.0
+      go_backwards: false
+      implementation: 1
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: lstm_local_right_1
+      recurrent_activation: hard_sigmoid
+      recurrent_constraint: null
+      recurrent_dropout: 0.0
+      recurrent_initializer:
+        class_name: Orthogonal
+        config:
+          gain: 1.0
+          seed: null
+      recurrent_regularizer: null
+      return_sequences: false
+      return_state: false
+      stateful: false
+      trainable: true
+      unit_forget_bias: true
+      units: 80
+      unroll: false
+      use_bias: true
+    inbound_nodes:
+    - - - time_distributed_4
+        - 0
+        - 0
+        - {}
+    name: lstm_local_right_1
+  - class_name: Dropout
+    config:
+      name: dropout_1
+      noise_shape: null
+      rate: 0.3
+      seed: null
+      trainable: true
+    inbound_nodes:
+    - - - lstm_left_1
+        - 0
+        - 0
+        - {}
+    name: dropout_1
+  - class_name: Dense
+    config:
+      activation: relu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: dense_2
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - dense_1
+        - 0
+        - 0
+        - {}
+    name: dense_2
+  - class_name: Dropout
+    config:
+      name: dropout_2
+      noise_shape: null
+      rate: 0.3
+      seed: null
+      trainable: true
+    inbound_nodes:
+    - - - lstm_right_1
+        - 0
+        - 0
+        - {}
+    name: dropout_2
+  - class_name: Dropout
+    config:
+      name: dropout_3
+      noise_shape: null
+      rate: 0.6
+      seed: null
+      trainable: true
+    inbound_nodes:
+    - - - lstm_local_left_1
+        - 0
+        - 0
+        - {}
+    name: dropout_3
+  - class_name: Dropout
+    config:
+      name: dropout_4
+      noise_shape: null
+      rate: 0.6
+      seed: null
+      trainable: true
+    inbound_nodes:
+    - - - lstm_local_right_1
+        - 0
+        - 0
+        - {}
+    name: dropout_4
+  - class_name: Concatenate
+    config:
+      axis: -1
+      name: concatenate_4
+      trainable: true
+    inbound_nodes:
+    - - - dropout_1
+        - 0
+        - 0
+        - &id004 {}
+      - - dense_2
+        - 0
+        - 0
+        - *id004
+      - - dropout_2
+        - 0
+        - 0
+        - *id004
+    name: concatenate_4
+  - class_name: Concatenate
+    config:
+      axis: -1
+      name: concatenate_5
+      trainable: true
+    inbound_nodes:
+    - - - dropout_3
+        - 0
+        - 0
+        - &id005 {}
+      - - dropout_4
+        - 0
+        - 0
+        - *id005
+    name: concatenate_5
+  - class_name: Dense
+    config:
+      activation: relu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: dense_3
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - concatenate_4
+        - 0
+        - 0
+        - {}
+    name: dense_3
+  - class_name: Dense
+    config:
+      activation: relu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: dense_4
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - concatenate_5
+        - 0
+        - 0
+        - {}
+    name: dense_4
+  - class_name: Concatenate
+    config:
+      axis: -1
+      name: concatenate_6
+      trainable: true
+    inbound_nodes:
+    - - - dense_3
+        - 0
+        - 0
+        - &id006 {}
+      - - dense_4
+        - 0
+        - 0
+        - *id006
+    name: concatenate_6
+  - class_name: Dense
+    config:
+      activation: relu
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: dense_5
+      trainable: true
+      units: 100
+      use_bias: true
+    inbound_nodes:
+    - - - concatenate_6
+        - 0
+        - 0
+        - {}
+    name: dense_5
+  - class_name: Dense
+    config:
+      activation: softmax
+      activity_regularizer: null
+      bias_constraint: null
+      bias_initializer:
+        class_name: Zeros
+        config: {}
+      bias_regularizer: null
+      kernel_constraint: null
+      kernel_initializer:
+        class_name: VarianceScaling
+        config:
+          distribution: uniform
+          mode: fan_avg
+          scale: 1.0
+          seed: null
+      kernel_regularizer: null
+      name: pitch_prediction
+      trainable: true
+      units: 61
+      use_bias: true
+    inbound_nodes:
+    - - - dense_5
+        - 0
+        - 0
+        - {}
+    name: pitch_prediction
+  name: model_1
+  output_layers:
+  - - pitch_prediction
+    - 0
+    - 0
+keras_version: 2.2.4
