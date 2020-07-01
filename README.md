@@ -3,7 +3,7 @@
 
 Bach, 嵐，back number風の曲を生成，メロディを入力するとそれぞれの雰囲気のコードを付ける．
 
-auto.py で一連のコードが実行される．
+auto.py を実行し，ARASHI, backnumber, Bachのディレクトリにmidiファイルを追加するとその雰囲気に合わせたコードを付けてmusescoreで表示される．
 
 sample_midiに生成例がある（kerokero, hana, kirakira, Mt.Fujiはかえるのうた，滝廉太郎の花，きらきら星，富士山をメロディとして入力する場合のためのもの）．
 〇〇生成例とついているのはメロディも生成した場合．
@@ -12,6 +12,7 @@ demo/backnumber_kerokero はbacknumber風のコードを付けたかえるのう
 〇〇.msczはmuse scoreの形式で楽譜が出力される，〇〇.midはmidi形式
 
 #### 使用環境
-Keras: 
-
-Musescore2: 
+-Keras: 2.1.6
+-numpy: 1.16.3
+-Musescore2: 2.3.2
+-music21: 5.5.0
