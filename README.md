@@ -7,6 +7,7 @@ auto.py で一連のコードが実行される．
 
 sample_midiに生成例がある（kerokero, hana, kirakira, Mt.Fujiはかえるのうた，滝廉太郎の花，きらきら星，富士山をメロディとして入力する場合のためのもの）．
 〇〇生成例とついているのはメロディも生成した場合．
+demo/backnumber_kerokero はbacknumber風のコードを付けたかえるのうた，demo/backnumber_extended はbacknumber風にメロディから生成した曲．
 
 〇〇.msczはmuse scoreの形式で楽譜が出力される，〇〇.midはmidi形式
 
