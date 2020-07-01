@@ -2,6 +2,10 @@
 五月祭の自動作曲展示
 
 Bach, 嵐，back number風の曲を生成，メロディを入力するとそれぞれの雰囲気のコードを付ける．
+-Bach music21に収録されているコラールのデータ352曲を全調に移調しデータを水増しして2503曲に
+-嵐 musescoreに68曲を手打ち，短調と長調で曲調に差があったため長調のみを学習データとした
+-backnumber musescoreに28曲を手打ち
+-bachは一曲当たり30小節程度，嵐とbacknumberは100小節程度
 
 auto.py を実行し，ARASHI, backnumber, Bachのディレクトリにmidiファイルを追加するとその雰囲気に合わせたコードを付けてmusescoreで表示される．
 
