@@ -5,9 +5,10 @@ Bach, 嵐，back number風の曲を生成，メロディを入力するとそれ
 
 auto.py で一連のコードが実行される．
 
-demo に生成例がある（kerokeroはかえるのうたをメロディとして入力した場合にそれぞれの雰囲気のコードをつけた例）
+sample_midiに生成例がある（kerokero, hana, kirakira, Mt.Fujiはかえるのうた，滝廉太郎の花，きらきら星，富士山をメロディとして入力する場合のためのもの）．
+〇〇生成例とついているのはメロディも生成した場合．
 
-*.msczはmuse scoreの形式，*.midはmidi形式
+〇〇.msczはmuse scoreの形式で楽譜が出力される，〇〇.midはmidi形式
 
 #### 使用環境
 Keras: 
